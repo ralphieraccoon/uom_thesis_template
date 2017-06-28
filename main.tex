@@ -1,0 +1,130 @@
+%%%%%%%%%%%%%%%%%% USAGE INSTRUCTIONS %%%%%%%%%%%%%%%%%%
+% - Compile using LuaLaTeX and biber, unless there is a particular reason not to. Do not use the older LaTex/PDFLaTeX or BibTeX. (The fonts won't work correctly.)
+% - Font and the report 'year' must be specified when all \documentclass or the template won't work correctly. (There's no error checking/default cases!)
+% - Options for fonts are: calibri, times, palatino, garamond, arial, tahoma, verdana, trebuchet. Use Calibri unless there is a particular reason not to. Times would be the next choice. 
+% - Options for 'year' are: first, second, thesis. 
+% - Save images/graphics as PDF files, not as png/jpg/eps. This makes no difference to how images are inserted using \includegraphics.
+% - As many further packages as wanted can be loaded. Below are just an example set. Note that template itself loads a number of packages, including hyperref.
+% - References are handed using biblatex. The code below uses the refsection=chapter argument to place references at the end of each chapter, rather than in one big list at the end of the document. This is approripate for theses. For first and second year reports this argument should be removed - here you do expect just one list of references at the end of the document.
+% - Use \printbibliography[title={References},heading=subbibintoc] when want to place a list of references. If having just one list of references remove the heading=subbibintoc argument
+% - Don't need to include a \uomdeclarations unless this is a thesis
+
+
+%%%%%%%%%%%%%%%%%% DOCUMENT SETUP %%%%%%%%%%%%%%%%%%
+\documentclass[calibri,thesis]{uom_thesis_casson} % Font should be calibri, can use times if necessary. Year can be: first, second or thesis.
+
+
+% Packages
+\usepackage{graphicx,psfrag,color} % for postscript graphics files
+\usepackage{amsmath}               % assumes amsmath package installed
+  \allowdisplaybreaks[1]           % allow eqnarrays to break across pages
+\usepackage{amssymb}               % assumes amsmath package installed 
+\usepackage{url}                   % format hyperlinks correctly
+\usepackage{rotating}              % allow portrait figures and tables
+\usepackage{multirow}              % allows merging of rows in tables
+\usepackage{lscape}                % allows pages to be typeset in landscape mode
+\usepackage{tabularx}              % allows fixed width tables
+\usepackage{lscape}                % allows pages to be typeset in landscape mode
+\usepackage{verbatim}              % enhanced version of built-in verbatim environment
+\usepackage{footnote}              % allows more control over footnote environments
+\usepackage{float}                 % allows H option on floats to force here placement
+\usepackage{booktabs}              % improve table line spacing
+\usepackage{lipsum}                % for adding dummy text here
+\usepackage[backend=biber,style=ieee,bibencoding=utf8,hyperref=auto,refsection=chapter]{biblatex} % remove refsection=chapter if writing a first or second year transfer report
+  \addbibresource{references.bib}
+  \renewcommand*{\bibfont}{\large}
+
+% Custom commands
+\newcommand{\degree}{\ensuremath{^\circ}}
+
+
+%%%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%
+\begin{document}
+\title{A data reduction algorithm incorporating a low power continuous wavelet transform for use in wearable electroencephalography systems}
+\author{Alexander Casson}
+\faculty{Science and Engineering}               % "Faculty of" is added automatically
+\school{Electrical and Electronic Engineering}  % "School of" is added automatically
+\submitdate{2017}                               % regulations ask only for the year, not month
+\maketitle
+
+
+%%%%%%%%%%%%%%%%%% ABSTRACT %%%%%%%%%%%%%%%%%%
+\begin{abstract} % put abstract here. Limit is 1 page.
+  This is abstract text.
+\end{abstract}%
+\clearpage 
+
+
+%%%%%%%%%%%%%%%%%% LISTS OF CONTENT %%%%%%%%%%%%%%%%%%
+\uomtoc % probably don't need all of these unless final thesis
+\uomlof
+\uomlot
+\begin{uomlop} % list of publication. Can use biblatex to \printbibliography[heading=none] to populate automatically, but probably easier to just type in
+Publications go here.
+\end{uomlop}
+% Add list of terms and abbreviations by hand if wanted. Is no formal requirement to have one
+
+
+%%%%%%%%%%%%%%%%%% ACKNOLEDGEMENTS %%%%%%%%%%%%%%%%%%
+\begin{uomacknowledgements} % probably don't need unless final thesis
+Acknowledgements go here.
+\end{uomacknowledgements}
+
+
+%%%%%%%%%%%%%%%%%% DECARLATIONS %%%%%%%%%%%%%%%%%%
+\uomdeclarations % Don't need unless final thesis
+
+
+%%%%%%%%%%%%%%%%%% MAIN CONTENT %%%%%%%%%%%%%%%%%%
+\chapter{Introduction} % probably better to use \input{} to draw content from other files rather than having everything in one big file
+  \lipsum[1-5] % generate dummy text for here
+
+\chapter{Literature review}
+
+  \section{Introduction}
+  \lipsum[1] 
+  
+  \section{Content}
+  \lipsum[1-2] \cite{ref:jCAS09,ref:jCAS09a,ref:jCAS10} \lipsum[3-5]
+  
+  \section{Summary}
+  \lipsum[6]
+  
+  \printbibliography[title={References},heading=subbibintoc] % add references at the end of the chapter
+  
+  
+\chapter{Really good work}
+
+  \section{Introduction}
+  \lipsum[1] 
+  
+  \section{Content}
+    \subsection{Introduction}
+	\lipsum[1]
+	
+	\subsection{Detail}
+    \lipsum[1-2] \cite{ref:jCAS10,ref:jCAS09,ref:jCAS09a} \lipsum[3-5]
+    
+	\subsection{More detail}
+	\lipsum[1-2] \cite{ref:jCAS10,ref:jCAS09,ref:jCAS09a} \lipsum[3-5]
+	
+	\subsection{Summary}
+	\lipsum[1]
+  
+  \section{Summary}
+  \lipsum[6]
+  
+  \printbibliography[title={References},heading=subbibintoc] % add references at the end of the chapter
+
+  
+\chapter{Conclusions}
+
+
+%%%%%%%%%%%%%%%%%% APPENDICIES %%%%%%%%%%%%%%%%%%
+\uomappendix 
+\chapter{First appendix}
+\lipsum[1-6]
+
+
+%%%%%%%%%%%%%%%%%% END MATTER %%%%%%%%%%%%%%%%%%
+\end{document}
