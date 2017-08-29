@@ -27,7 +27,7 @@
 
 %% Class definition - based upon report class
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{uom_thesis_casson}[2017/06/07 - Alex Casson - University of Manchester thesis format]
+\ProvidesClass{uom_thesis_casson}[2017/08/29 - Alex Casson - University of Manchester thesis format]
 \LoadClass[a4paper, oneside]{report}
 
 
@@ -44,11 +44,14 @@
   \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % add dots 
   \renewcommand{\cftsubsecleader}{\cftdotfill{\cftdotsep}}
 \RequirePackage{hyperref}                % create internal hyperlinks, must be specified before cite package to work
-  \hypersetup{hidelinks,colorlinks=false,breaklinks=true,bookmarks=true]}  % have no highlighting on links and break lines in the LOF and LOT
+  \hypersetup{hidelinks,colorlinks=false,breaklinks=true,bookmarksdepth=2}  % have no highlighting on links and break lines in the LOF and LOT
 \RequirePackage{bookmark}                % for adding custom bookmarks
+  \bookmarksetup{numbered}
 \RequirePackage{enumitem}                % allow change of numbering style in enumeration
 \RequirePackage{ifthen}                  % allow if then else statements
-
+\RequirePackage{appendix}                % control over appendix
+\RequirePackage{caption}                 % control figure captions
+ 
   
 %% Handle options
 \def\@@ptsize{12pt} % font size variable
@@ -73,9 +76,9 @@
 \newlength{\logoheight}   \setlength{\logoheight}{19.454mm}
 \newlength{\logopad}      \setlength{\logopad}{14.279mm}
 \newlength{\marginleft}   \setlength{\marginleft}{4cm}   % Minimum margins are 1.5cm, 4cm, 1.5cm, 1.5cm
-\newlength{\marginright}  \setlength{\marginright}{2.5cm} 
-\newlength{\margintop}    \setlength{\margintop}{2.5cm}
-\newlength{\marginbottom} \setlength{\marginbottom}{2.5cm}  
+\newlength{\marginright}  \setlength{\marginright}{2cm} 
+\newlength{\margintop}    \setlength{\margintop}{2cm}
+\newlength{\marginbottom} \setlength{\marginbottom}{2cm}  
 
 
 
@@ -90,7 +93,7 @@
 
 
 
-%% Formatting options
+%% Formatting options - mainly for font size
 \setlength{\parskip}{2ex plus 0.5ex minus 0.2ex}
 \setlength{\parindent}{0pt}
 \linespread{1.5}
@@ -103,6 +106,8 @@
 \renewcommand{\textfraction}{0.1}
 \renewcommand{\floatpagefraction}{0.75}
 \setlength{\footskip}{26pt}
+\DeclareCaptionFormat{myformat}{\fontsize{\@@ptsize}{\@@ptsize+1pt}\selectfont#1#2#3}
+\captionsetup{justification=centering,format=myformat}
 
 
 
@@ -118,7 +123,6 @@
 \titleformat{\subsection}{\bfseries\large}{\thesubsection}{1ex}{#1}
 
 
-
 %% Title page
 \makeatletter
 \def\faculty#1{\gdef\@faculty{#1}}
@@ -132,7 +136,8 @@
 }
 \def\maketitle{
   \begin{titlepage}
-    \phantomsection \pdfbookmark[chapter]{Title page}{title}
+    \bookmark[page=1,level=-1]{Front matter}
+	\phantomsection \pdfbookmark[chapter]{Title page}{title}
   
     % Add logo. No requirement for this, but is nice. Note sizes are hand calculated. Won't be correct if change paper size
     \pgfdeclareimage[width=\logowidth]{uom_logo}{uom_logo}
@@ -186,7 +191,7 @@
   \clearpage
   }  
 \newcommand{\uomlot}{
-  \phantomsection\addcontentsline{toc}{chapter}{List of figures}
+  \phantomsection\addcontentsline{toc}{chapter}{List of tables}
   \listoftables
   \clearpage
   }    
@@ -222,15 +227,21 @@
     \item The ownership of certain Copyright, patents, designs, trademarks and other intellectual property (the ``Intellectual Property'') and any reproductions of copyright works in the thesis, for example graphs and tables (``Reproductions''), which may be described in this thesis, may not be owned by the author and may be owned by third parties. Such Intellectual Property and Reproductions cannot and must not be made available for use without the prior written permission of the owner(s) of the relevant Intellectual Property and/or Reproductions.
 	\item Further information on the conditions under which disclosure, publication and commercialisation of this thesis, the Copyright and any Intellectual Property and/or Reproductions described in it may take place is available in the University IP Policy (see \url{http://documents.manchester.ac.uk/DocuInfo.aspx?DocID=24420)}, in any relevant Thesis restriction declarations deposited in the University Library, The University Library’s regulations (see \url{http://www.library.manchester.ac.uk/about/regulations/}) and in The University’s policy on Presentation of Theses.
   \end{enumerate}
+  \bookmarksetup{startatroot}
   \clearpage
 }
 
 
 
 %% Appendix
-\newcommand{\uomappendix}{
+\newenvironment{uomappendix}{
   \clearpage
-  \appendix
-  \phantomsection\addcontentsline{toc}{chapter}{Appendix}
-  \setcounter{tocdepth}{0} % don't display full contents for appendix
+  \bookmarksetupnext{level=part}
+  \phantomsection\addcontentsline{toc}{chapter}{Appendices}
+  \chapter*{Appendices} 
+  \clearpage
+  \renewcommand\chaptername{Appendix}
+  \begin{appendices}
+  \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 }
+{\end{appendices}}

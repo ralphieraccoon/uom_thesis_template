@@ -1,17 +1,17 @@
 %%%%%%%%%%%%%%%%%% USAGE INSTRUCTIONS %%%%%%%%%%%%%%%%%%
 % - Compile using LuaLaTeX and biber, unless there is a particular reason not to. Do not use the older LaTex/PDFLaTeX or BibTeX. (The fonts won't work correctly.)
 % - Font and the report 'year' must be specified when all \documentclass or the template won't work correctly. (There's no error checking/default cases!)
-% - Options for fonts are: calibri, times, palatino, garamond, arial, tahoma, verdana, trebuchet. Use Calibri unless there is a particular reason not to. Times would be the next choice. 
+% - Options for fonts are: calibri, times, palatino, garamond, arial, tahoma, verdana, trebuchet. Use times unless there is a particular reason not to. Calibri would be the next choice. 
 % - Options for 'year' are: first, second, thesis. 
 % - Save images/graphics as PDF files, not as png/jpg/eps. This makes no difference to how images are inserted using \includegraphics.
 % - As many further packages as wanted can be loaded. Below are just an example set. Note that template itself loads a number of packages, including hyperref.
-% - References are handed using biblatex. The code below uses the refsection=chapter argument to place references at the end of each chapter, rather than in one big list at the end of the document. This is approripate for theses. For first and second year reports this argument should be removed - here you do expect just one list of references at the end of the document.
+% - References are handed using biblatex. The code below uses the refsection=chapter argument to place references at the end of each chapter, rather than in one big list at the end of the document. This is approripate for theses. For first and second year reports this argument should be removed - here you do expect just one list of references at the end of the document. Note the two bug fixes for biblatex that have to be applied here, not in the class file
 % - Use \printbibliography[title={References},heading=subbibintoc] when want to place a list of references. If having just one list of references remove the heading=subbibintoc argument
 % - Don't need to include a \uomdeclarations unless this is a thesis
 
 
 %%%%%%%%%%%%%%%%%% DOCUMENT SETUP %%%%%%%%%%%%%%%%%%
-\documentclass[calibri,thesis]{uom_thesis_casson} % Font should be calibri, can use times if necessary. Year can be: first, second or thesis.
+\documentclass[times,thesis]{uom_thesis_casson} % Font should be calibri, can use times if necessary. Year can be: first, second or thesis.
 
 
 % Packages
@@ -33,6 +33,7 @@
 \usepackage[backend=biber,style=ieee,bibencoding=utf8,hyperref=auto,refsection=chapter]{biblatex} % remove refsection=chapter if writing a first or second year transfer report
   \addbibresource{references.bib}
   \renewcommand*{\bibfont}{\large}
+  \makeatletter \pretocmd{\blx@head@subbibintoc}{\phantomsection}{}{\ddt} \makeatother 
 
 % Custom commands
 \newcommand{\degree}{\ensuremath{^\circ}}
@@ -86,6 +87,26 @@ Acknowledgements go here.
   
   \section{Content}
   \lipsum[1-2] \cite{ref:jCAS09,ref:jCAS09a,ref:jCAS10} \lipsum[3-5]
+  \begin{table}
+    \centering
+    \caption{Example table.}
+    \label{table:example_table}
+    \begin{tabular}{ccccc}
+      \toprule
+      \multirow{2}{*}{Participant} & \multicolumn{2}{c}{Number / \%} & \multicolumn{2}{c}{Duration / \%} \\
+                                   & Prime dresses & Non-prime dresses & Prime dresses & Non-prime dresses \\
+	  \toprule
+      1  & 33.33 & 33.91 & 20.83 & 18.42 \\
+      2  & 13.04 & 17.50 & 04.93 & 07.62 \\
+      3  & 22.73 & 20.10 & 13.00 & 08.20 \\
+      4  & 31.34 & 21.88 & 10.57 & 11.09 \\
+      5  & 08.47 & 19.32 & 03.04 & 09.73 \\
+      \hline
+      Mean & 16.4 & 16.5 & 07.8 & 07.5 \\
+      Standard deviation & 09.7 & 06.6 & 05.4 & 03.3 \\
+      \bottomrule
+    \end{tabular}
+  \end{table}  
   
   \section{Summary}
   \lipsum[6]
@@ -104,6 +125,12 @@ Acknowledgements go here.
 	
 	\subsection{Detail}
     \lipsum[1-2] \cite{ref:jCAS10,ref:jCAS09,ref:jCAS09a} \lipsum[3-5]
+	\begin{figure}
+      \centering
+      \includegraphics[width=0.3\textwidth]{uom_logo.pdf}
+      \caption{Example figure.}
+      \label{fig:uom_logo}
+    \end{figure} 
     
 	\subsection{More detail}
 	\lipsum[1-2] \cite{ref:jCAS10,ref:jCAS09,ref:jCAS09a} \lipsum[3-5]
@@ -121,9 +148,11 @@ Acknowledgements go here.
 
 
 %%%%%%%%%%%%%%%%%% APPENDICIES %%%%%%%%%%%%%%%%%%
-\uomappendix 
-\chapter{First appendix}
-\lipsum[1-6]
+\begin{uomappendix} 
+  \chapter{First appendix}
+    \section{Section in Appendix}
+    \lipsum[1-6]
+\end{uomappendix}
 
 
 %%%%%%%%%%%%%%%%%% END MATTER %%%%%%%%%%%%%%%%%%
