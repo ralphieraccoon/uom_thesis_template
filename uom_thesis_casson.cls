@@ -76,9 +76,9 @@
 \newlength{\logoheight}   \setlength{\logoheight}{19.454mm}
 \newlength{\logopad}      \setlength{\logopad}{14.279mm}
 \newlength{\marginleft}   \setlength{\marginleft}{4cm}   % Minimum margins are 1.5cm, 4cm, 1.5cm, 1.5cm
-\newlength{\marginright}  \setlength{\marginright}{2cm} 
-\newlength{\margintop}    \setlength{\margintop}{2cm}
-\newlength{\marginbottom} \setlength{\marginbottom}{2cm}  
+\newlength{\marginright}  \setlength{\marginright}{1.5cm} 
+\newlength{\margintop}    \setlength{\margintop}{1.5cm}
+\newlength{\marginbottom} \setlength{\marginbottom}{1.5cm}  
 
 
 
@@ -112,7 +112,7 @@
 
 
 %% Format titles
-\titleformat{\chapter}{\bfseries\Huge}{\thechapter}{1ex}{#1} % default formatting for non-theses
+\titleformat{\chapter}{\bfseries\Huge\raggedright}{\thechapter}{1ex}{#1} % default formatting for non-theses
 \titlespacing{\chapter}{0pt}{\@@ptsize}{\baselineskip}
 \ifthenelse{\equal{\reportyear}{thesis}}{\titleformat{\chapter}[display]{\bfseries\Huge}{\chaptername~\thechapter}{0.5ex}{#1}}{}
 \renewcommand{\contentsname}{\bfseries\Huge Contents}
