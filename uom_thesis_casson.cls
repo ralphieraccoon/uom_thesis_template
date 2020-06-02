@@ -237,10 +237,10 @@
   \clearpage
   \bookmarksetupnext{level=part}
   \phantomsection\addcontentsline{toc}{chapter}{Appendices}
+  \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
   \chapter*{Appendices} 
   \clearpage
   \renewcommand\chaptername{Appendix}
   \begin{appendices}
-  \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 }
 {\end{appendices}}
