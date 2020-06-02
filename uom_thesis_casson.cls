@@ -173,7 +173,6 @@
   \begin{center}%
       {\Large \bfseries \abstractname\vspace{-.5em}\vspace{0pt}}%
   \end{center}%
-  \quotation
 }
 {\addcontentsline{toc}{chapter}{\abstractname}\endquotation\vfil\null\clearpage}
 
