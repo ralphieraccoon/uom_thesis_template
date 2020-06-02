@@ -114,7 +114,7 @@
 %% Format titles
 \titleformat{\chapter}{\bfseries\Huge\raggedright}{\thechapter}{1ex}{#1} % default formatting for non-theses
 \titlespacing{\chapter}{0pt}{\@@ptsize}{\baselineskip}
-\ifthenelse{\equal{\reportyear}{thesis}}{\titleformat{\chapter}[display]{\bfseries\Huge}{\chaptername~\thechapter}{0.5ex}{#1}}{}
+\ifthenelse{\equal{\reportyear}{thesis}}{\titleformat{\chapter}[display]{\bfseries\Huge\raggedright}{\chaptername~\thechapter}{0.5ex}{#1}}{}
 \renewcommand{\contentsname}{\bfseries\Huge Contents}
 \renewcommand{\listfigurename}{\bfseries\Huge List of figures}
 \renewcommand{\listtablename}{\bfseries\Huge List of tables}
@@ -126,7 +126,7 @@
 %% Title page
 \makeatletter
 \def\faculty#1{\gdef\@faculty{#1}}
-\def\school#1{\gdef\@school{#1}}
+\def\department#1{\gdef\@department{#1}}
 \def\submitdate#1{\gdef\@submitdate{#1}}
 \newcommand{\titletext}[1]
 {
@@ -153,7 +153,7 @@
 	  \@submitdate
 	  \vskip 3cm
 	  \@author\ \linebreak
-	  School of \@school
+	  Department of \@department
       \vspace*{\fill}
     \end{center}
 
@@ -173,7 +173,6 @@
   \begin{center}%
       {\Large \bfseries \abstractname\vspace{-.5em}\vspace{0pt}}%
   \end{center}%
-  \quotation
 }
 {\addcontentsline{toc}{chapter}{\abstractname}\endquotation\vfil\null\clearpage}
 
@@ -183,6 +182,10 @@
 \newcommand{\uomtoc}{
   \phantomsection\addcontentsline{toc}{chapter}{Contents}
   \tableofcontents
+  \vspace*{\fill}
+  \begin{flushright}
+  \textbf{Word Count}: \wordcount
+  \end{flushright}
   \clearpage
   }
 \newcommand{\uomlof}{
@@ -225,7 +228,7 @@
     \item The author of this thesis (including any appendices and/or schedules to this thesis) owns certain copyright or related rights in it (the ``Copyright'') and s/he has given The University of Manchester certain rights to use such Copyright, including for administrative purposes.
     \item Copies of this thesis, either in full or in extracts and whether in hard or electronic copy, may be made \emph{only} in accordance with the Copyright, Designs and Patents Act 1988 (as amended) and regulations issued under it or, where appropriate, in accordance with licensing agreements which the University has from time to time. This page must form part of any such copies made.
     \item The ownership of certain Copyright, patents, designs, trademarks and other intellectual property (the ``Intellectual Property'') and any reproductions of copyright works in the thesis, for example graphs and tables (``Reproductions''), which may be described in this thesis, may not be owned by the author and may be owned by third parties. Such Intellectual Property and Reproductions cannot and must not be made available for use without the prior written permission of the owner(s) of the relevant Intellectual Property and/or Reproductions.
-	\item Further information on the conditions under which disclosure, publication and commercialisation of this thesis, the Copyright and any Intellectual Property and/or Reproductions described in it may take place is available in the University IP Policy (see \url{http://documents.manchester.ac.uk/DocuInfo.aspx?DocID=24420)}, in any relevant Thesis restriction declarations deposited in the University Library, The University Library’s regulations (see \url{http://www.library.manchester.ac.uk/about/regulations/}) and in The University’s policy on Presentation of Theses.
+	\item Further information on the conditions under which disclosure, publication and commercialisation of this thesis, the Copyright and any Intellectual Property and/or Reproductions described in it may take place is available in the University IP Policy (see \url{http://documents.manchester.ac.uk/DocuInfo.aspx?DocID=24420}), in any relevant Thesis restriction declarations deposited in the University Library, The University Library’s regulations (see \url{http://www.library.manchester.ac.uk/about/regulations/}) and in The University’s policy on Presentation of Theses.
   \end{enumerate}
   \bookmarksetup{startatroot}
   \clearpage
@@ -238,10 +241,10 @@
   \clearpage
   \bookmarksetupnext{level=part}
   \phantomsection\addcontentsline{toc}{chapter}{Appendices}
+  \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
   \chapter*{Appendices} 
   \clearpage
   \renewcommand\chaptername{Appendix}
   \begin{appendices}
-  \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 }
 {\end{appendices}}
