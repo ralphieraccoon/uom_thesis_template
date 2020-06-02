@@ -126,7 +126,7 @@
 %% Title page
 \makeatletter
 \def\faculty#1{\gdef\@faculty{#1}}
-\def\school#1{\gdef\@school{#1}}
+\def\department#1{\gdef\@department{#1}}
 \def\submitdate#1{\gdef\@submitdate{#1}}
 \newcommand{\titletext}[1]
 {
@@ -153,7 +153,7 @@
 	  \@submitdate
 	  \vskip 3cm
 	  \@author\ \linebreak
-	  School of \@school
+	  Department of \@department
       \vspace*{\fill}
     \end{center}
 
