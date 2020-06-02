@@ -114,7 +114,7 @@
 %% Format titles
 \titleformat{\chapter}{\bfseries\Huge\raggedright}{\thechapter}{1ex}{#1} % default formatting for non-theses
 \titlespacing{\chapter}{0pt}{\@@ptsize}{\baselineskip}
-\ifthenelse{\equal{\reportyear}{thesis}}{\titleformat{\chapter}[display]{\bfseries\Huge}{\chaptername~\thechapter}{0.5ex}{#1}}{}
+\ifthenelse{\equal{\reportyear}{thesis}}{\titleformat{\chapter}[display]{\bfseries\Huge\raggedright}{\chaptername~\thechapter}{0.5ex}{#1}}{}
 \renewcommand{\contentsname}{\bfseries\Huge Contents}
 \renewcommand{\listfigurename}{\bfseries\Huge List of figures}
 \renewcommand{\listtablename}{\bfseries\Huge List of tables}
