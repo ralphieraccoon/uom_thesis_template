@@ -182,6 +182,10 @@
 \newcommand{\uomtoc}{
   \phantomsection\addcontentsline{toc}{chapter}{Contents}
   \tableofcontents
+  \vspace*{\fill}
+  \begin{flushright}
+  \textbf{Word Count}: \wordcount
+  \end{flushright}
   \clearpage
   }
 \newcommand{\uomlof}{
