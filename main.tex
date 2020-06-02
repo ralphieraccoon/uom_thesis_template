@@ -48,14 +48,6 @@
 \submitdate{2017}                                  % regulations ask only for the year, not month
 \maketitle
 
-
-%%%%%%%%%%%%%%%%%% ABSTRACT %%%%%%%%%%%%%%%%%%
-\begin{abstract} % put abstract here. Limit is 1 page.
-  This is abstract text.
-\end{abstract}%
-\clearpage 
-
-
 %%%%%%%%%%%%%%%%%% LISTS OF CONTENT %%%%%%%%%%%%%%%%%%
 \uomtoc % probably don't need all of these unless final thesis
 \uomlof
@@ -65,16 +57,19 @@ Publications go here.
 \end{uomlop}
 % Add list of terms and abbreviations by hand if wanted. Is no formal requirement to have one
 
+%%%%%%%%%%%%%%%%%% ABSTRACT %%%%%%%%%%%%%%%%%%
+\begin{abstract} % put abstract here. Limit is 1 page.
+  This is abstract text.
+\end{abstract}%
+\clearpage 
+
+%%%%%%%%%%%%%%%%%% DECARLATIONS %%%%%%%%%%%%%%%%%%
+\uomdeclarations % Don't need unless final thesis
 
 %%%%%%%%%%%%%%%%%% ACKNOLEDGEMENTS %%%%%%%%%%%%%%%%%%
 \begin{uomacknowledgements} % probably don't need unless final thesis
 Acknowledgements go here.
 \end{uomacknowledgements}
-
-
-%%%%%%%%%%%%%%%%%% DECARLATIONS %%%%%%%%%%%%%%%%%%
-\uomdeclarations % Don't need unless final thesis
-
 
 %%%%%%%%%%%%%%%%%% MAIN CONTENT %%%%%%%%%%%%%%%%%%
 \chapter{Introduction} % probably better to use \input{} to draw content from other files rather than having everything in one big file
