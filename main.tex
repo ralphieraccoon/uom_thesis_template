@@ -34,6 +34,9 @@
   \addbibresource{references.bib}
   \renewcommand*{\bibfont}{\large}
   \makeatletter \pretocmd{\blx@head@subbibintoc}{\phantomsection}{}{\ddt} \makeatother 
+\usepackage{tocloft} % allows modifying width between number and text in LoF and LoT
+\setlength{\cftfignumwidth}{3em}  % Modify number width in LoF
+\setlength{\cfttabnumwidth}{3em}  % Modify number width in LoT
 
 % Custom commands
 \newcommand{\degree}{\ensuremath{^\circ}}
