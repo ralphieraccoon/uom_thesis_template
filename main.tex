@@ -3,19 +3,24 @@
 % - Font and the report 'year' must be specified when all \documentclass or the template won't work correctly. (There's no error checking/default cases!)
 % - Options for fonts are: calibri, times, palatino, garamond, arial, tahoma, verdana, trebuchet. Use times unless there is a particular reason not to. Calibri would be the next choice. 
 % - Options for 'year' are: first, second, thesis. 
-% - Save images/graphics as PDF files, not as png/jpg/eps. This makes no difference to how images are inserted using \includegraphics.
+% - For best performance save images/graphics as PDF files, not as png/jpg/eps. This makes no difference to how images are inserted using \includegraphics.
 % - As many further packages as wanted can be loaded. Below are just an example set. Note that template itself loads a number of packages, including hyperref.
-% - References are handed using biblatex. The code below uses the refsection=chapter argument to place references at the end of each chapter, rather than in one big list at the end of the document. This is approripate for theses. For first and second year reports this argument should be removed - here you do expect just one list of references at the end of the document. Note the two bug fixes for biblatex that have to be applied here, not in the class file
-% - Use \printbibliography[title={References},heading=subbibintoc] when want to place a list of references. If having just one list of references remove the heading=subbibintoc argument
+% - References are handed using biblatex.
 % - Don't need to include a \uomdeclarations unless this is a thesis
+% - Link to the presentation of theses policy: http://www.regulations.manchester.ac.uk/pgr-presentation-theses/
+
 
 
 %%%%%%%%%%%%%%%%%% DOCUMENT SETUP %%%%%%%%%%%%%%%%%%
 \documentclass[times,thesis]{uom_thesis_casson} % Font should be calibri, can use times if necessary. Year can be: first, second or thesis.
 
 
+
+%%%%%%%%%%%%%%%%%% PACKAGES AND COMMANDS %%%%%%%%%%%%%%%%%%
+
 % Packages
 \usepackage{graphicx,psfrag,color} % for postscript graphics files
+  \graphicspath{ {./images/} }
 \usepackage{amsmath}               % assumes amsmath package installed
   \allowdisplaybreaks[1]           % allow eqnarrays to break across pages
 \usepackage{amssymb}               % assumes amsmath package installed 
@@ -24,59 +29,115 @@
 \usepackage{multirow}              % allows merging of rows in tables
 \usepackage{lscape}                % allows pages to be typeset in landscape mode
 \usepackage{tabularx}              % allows fixed width tables
-\usepackage{lscape}                % allows pages to be typeset in landscape mode
 \usepackage{verbatim}              % enhanced version of built-in verbatim environment
 \usepackage{footnote}              % allows more control over footnote environments
 \usepackage{float}                 % allows H option on floats to force here placement
 \usepackage{booktabs}              % improve table line spacing
 \usepackage{lipsum}                % for adding dummy text here
-\usepackage[backend=biber,style=ieee,bibencoding=utf8,hyperref=auto,refsection=chapter]{biblatex} % remove refsection=chapter if writing a first or second year transfer report
-  \addbibresource{references.bib}
-  \renewcommand*{\bibfont}{\large}
-  \makeatletter \pretocmd{\blx@head@subbibintoc}{\phantomsection}{}{\ddt} \makeatother 
-\usepackage{tocloft} % allows modifying width between number and text in LoF and LoT
-\setlength{\cftfignumwidth}{3em}  % Modify number width in LoF
-\setlength{\cfttabnumwidth}{3em}  % Modify number width in LoT
+\usepackage{subcaption}            % for multiple sub-figures in a single float
+% Add your packages here
+
+% Optional: for adding alt-text to images:
+\usepackage{pdfcomment}            % for alt text for accessibility
+
 
 % Custom commands
 \newcommand{\degree}{\ensuremath{^\circ}}
-\newcommand{\wordcount}{X}		  % Manually replace 'X' with the word count of document before submitting
+\newcommand{\sus}[1]{$^{\mbox{\scriptsize #1}}$} % superscript in text (e.g. 1st)
+\newcommand{\sub}[1]{$_{\mbox{\scriptsize #1}}$} % subscript in text
+\newcommand{\chap}[1]{Chapter~\ref{#1}}
+\newcommand{\sect}[1]{Section~\ref{#1}}
+\newcommand{\fig}[1]{Fig.~\ref{#1}}
+\newcommand{\tab}[1]{Table~\ref{#1}}
+\newcommand{\equ}[1]{(\ref{#1})}
+\newcommand{\appx}[1]{Appendix~\ref{#1}}
+% Add your commands here
+
+
+
+%%%%%%%%%%%%%%%%%% REFERENCES SETUP %%%%%%%%%%%%%%%%%%
+\usepackage[backend=biber,style=ieee,bibencoding=utf8,hyperref=auto]{biblatex}
+  \addbibresource{references.bib}
+  % Add more .bib files here if wanted
+
+% Bug fix which can't be applied in the .cls file
+\renewcommand*{\bibfont}{\large} 
+
+
+%%%%%%%%%%%%%%%%%% START DOCUMENT %%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+
+%%%%%%%%%%%%%%%%%% COVID-19 impact statement %%%%%%%%%%%%%%%%%%
+\begin{uomcovid} % policy asks for statement to be before the title page
+  % Policy asks for this to be removed from the final thesis post-examination, which messes up the page numbers somewhat. Done here so that the final post-examination thesis is correct. In the pre-examination thesis the numbers displayed on the page will be one lower than the number displayed by the PDF reader
+  This is COVID-19 impact text.
+  
+  \lipsum[1-3] % generate dummy text for here
+\end{uomcovid}% \clearpage is added automatically
+
 
 
 %%%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%
-\begin{document}
 \title{A data reduction algorithm incorporating a low power continuous wavelet transform for use in wearable electroencephalography systems}
-\author{Alexander Casson}
+\author{Alexander J.\ Casson}
 \faculty{Science and Engineering}                  % "Faculty of" is added automatically
 \department{Electrical and Electronic Engineering} % "Department of" is added automatically
-\submitdate{2017}                                  % regulations ask only for the year, not month
+\submitdate{2021}                                  % regulations ask only for the year, not month
+\newcommand{\wordcount}{X}		                   % manually replace 'X' with the word count of document before submitting - only displayed in for a thesis
 \maketitle
+
+
 
 %%%%%%%%%%%%%%%%%% LISTS OF CONTENT %%%%%%%%%%%%%%%%%%
 \uomtoc % probably don't need all of these unless final thesis
 \uomlof
 \uomlot
-\begin{uomlop} % list of publication. Can use biblatex to \printbibliography[heading=none] to populate automatically, but probably easier to just type in
-Publications go here.
+\begin{uomlop} % list of publications.
+  % Can use biblatex to \printbibliography[heading=none] to populate automatically, but probably easier to just type in
+  Publications go here.
 \end{uomlop}
-% Add list of terms and abbreviations by hand if wanted. Is no formal requirement to have one
+\begin{uomterms}
+  Enter terms and abbreviations as table or similar
+  % Add list of terms and abbreviations by hand if wanted. Is no formal requirement to have one
+\end{uomterms}
+
+
 
 %%%%%%%%%%%%%%%%%% ABSTRACT %%%%%%%%%%%%%%%%%%
 \begin{abstract} % put abstract here. Limit is 1 page.
-  This is abstract text.
+  This is abstract text. 
+  
+  \lipsum[1-2]
 \end{abstract}%
-\clearpage 
+\clearpage
 
-%%%%%%%%%%%%%%%%%% DECARLATIONS %%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%% LAY ABSTRACT %%%%%%%%%%%%%%%%%%
+\begin{uomlay} % put lay abstract here. Limit is 1 page. Not compulsory
+  This is lay abstract text. 
+  
+  \lipsum[1-2]
+\end{uomlay}
+
+
+
+%%%%%%%%%%%%%%%%%% DECLARATIONS %%%%%%%%%%%%%%%%%%
 \uomdeclarations % Don't need unless final thesis
 
-%%%%%%%%%%%%%%%%%% ACKNOLEDGEMENTS %%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%% ACKNOWLEDGEMENTS %%%%%%%%%%%%%%%%%%
 \begin{uomacknowledgements} % probably don't need unless final thesis
 Acknowledgements go here.
 \end{uomacknowledgements}
 
-%%%%%%%%%%%%%%%%%% MAIN CONTENT %%%%%%%%%%%%%%%%%%
-\chapter{Introduction} % probably better to use \input{} to draw content from other files rather than having everything in one big file
+
+
+%%%%%%%%%%%%%%%%%% CHAPTER 1 %%%%%%%%%%%%%%%%%%
+\chapter{Introduction} % probably better to use \input{} for each chapter to draw content from other files rather than having everything in one big file
   \lipsum[1-5] % generate dummy text for here
 
 \chapter{Literature review}
@@ -107,12 +168,17 @@ Acknowledgements go here.
     \end{tabular}
   \end{table}  
   
+  This is an example equation
+  \begin{equation}
+      a^{2} + b^{2} = c^{2}
+  \end{equation}
+  
   \section{Summary}
   \lipsum[6]
   
-  \printbibliography[title={References},heading=subbibintoc] % add references at the end of the chapter
   
   
+%%%%%%%%%%%%%%%%%% CHAPTER 2 %%%%%%%%%%%%%%%%%%
 \chapter{Really good work}
 
   \section{Introduction}
@@ -139,11 +205,18 @@ Acknowledgements go here.
   
   \section{Summary}
   \lipsum[6]
-  
-  \printbibliography[title={References},heading=subbibintoc] % add references at the end of the chapter
+ 
 
-  
+
+
+%%%%%%%%%%%%%%%%%% CONCLUSIONS %%%%%%%%%%%%%%%%%%
 \chapter{Conclusions}
+
+
+
+%%%%%%%%%%%%%%%%%% REFERENCES %%%%%%%%%%%%%%%%%%
+\printbibliography[title={References},heading=bibintoc] % a single list of references for the whole thesis
+
 
 
 %%%%%%%%%%%%%%%%%% APPENDICIES %%%%%%%%%%%%%%%%%%

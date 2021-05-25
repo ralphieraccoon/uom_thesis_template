@@ -4,6 +4,7 @@
 % A LaTeX class file for submitting University of Manchester thesis, particularly PhD ones
 %
 % Versions
+% 25.05.21 - v3 - updates for 2021: COVID impact statement, now a single list of references at the end, and a few minor cosmetic changes
 % 07.06.17 - v1 - initial script
 % 
 % Notes
@@ -19,15 +20,13 @@
 % - Note that for the references font size it is set here to be one larger than that actually wanted. Not clear why, but then gives the correct size! Have to do this in main .tex
 %
 % To do
-% - Remove indent at start of references
-% - Make customisations/changes to the references global, and in class.
-% - Add blank page to start appendix on to make more clear
+% - Caption size is fixed at 10pt for all fonts rather than changing with each font
 % -----------------------------------------------------------------------------
 
 
 %% Class definition - based upon report class
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{uom_thesis_casson}[2017/08/29 - Alex Casson - University of Manchester thesis format]
+\ProvidesClass{uom_thesis_casson}[2021/05/25 - Alex Casson - University of Manchester thesis format]
 \LoadClass[a4paper, oneside]{report}
 
 
@@ -43,20 +42,24 @@
   \renewcommand{\listtablename}{List of tables} 
   \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % add dots 
   \renewcommand{\cftsubsecleader}{\cftdotfill{\cftdotsep}}
+  \setlength{\cftfignumwidth}{3em}  % Modify number width in LoF
+  \setlength{\cfttabnumwidth}{3em}  % Modify number width in LoT
 \RequirePackage{hyperref}                % create internal hyperlinks, must be specified before cite package to work
-  \hypersetup{hidelinks,colorlinks=false,breaklinks=true,bookmarksdepth=2}  % have no highlighting on links and break lines in the LOF and LOT
+  \hypersetup{pdftitle={University of Manchester thesis},pdflang={en-GB},hidelinks,colorlinks=false,breaklinks=true,bookmarksdepth=2}  % have no highlighting on links and break lines in the LOF and LOT
+  % note the language is also set on line 80, should match
 \RequirePackage{bookmark}                % for adding custom bookmarks
   \bookmarksetup{numbered}
 \RequirePackage{enumitem}                % allow change of numbering style in enumeration
 \RequirePackage{ifthen}                  % allow if then else statements
 \RequirePackage{appendix}                % control over appendix
 \RequirePackage{caption}                 % control figure captions
- 
+
   
 %% Handle options
 \def\@@ptsize{12pt} % font size variable
+\@namedef{ds@10pt}{\def\@ptsize{10}}
 \newcommand{\reportyear}{thesis} % set report type
-\DeclareOption{calibri}{\setmainfont{Calibri} \def\@@ptsize{12pt}} 
+\DeclareOption{calibri}{\setmainfont{Calibri} \def\@@ptsize{12pt}}  
 \DeclareOption{times}{\setmainfont{TeX Gyre Termes} \def\@@ptsize{12pt}}
 \DeclareOption{palatino}{\setmainfont{TeX Gyre Pagella} \def\@@ptsize{12pt}}
 \DeclareOption{garamond}{\setmainfont{Adobe Garamond Pro} \def\@@ptsize{12pt}}
@@ -71,6 +74,14 @@
 \ProcessOptions\relax
 
 
+
+%% Accessibility options
+\RequirePackage[tagpdf]{axessibility} % LaTeX readable equations for accessibility
+  \tagpdfsetup{tabsorder=structure,uncompress,activate-all,interwordspace=true}
+  \pdfextension catalog{/Lang (en-GB)} % note the language is also set on line 48, should match
+\usepackage{unicode-math} % unicode maths for accessibility
+
+
 %% Set lengths - sizes for A4 paper from http://www.brand.manchester.ac.uk/visual-identity/print/
 \newlength{\logowidth}    \setlength{\logowidth}{40.006mm}
 \newlength{\logoheight}   \setlength{\logoheight}{19.454mm}
@@ -79,6 +90,9 @@
 \newlength{\marginright}  \setlength{\marginright}{1.5cm} 
 \newlength{\margintop}    \setlength{\margintop}{1.5cm}
 \newlength{\marginbottom} \setlength{\marginbottom}{1.5cm}  
+
+
+
 
 
 
@@ -106,10 +120,11 @@
 \renewcommand{\textfraction}{0.1}
 \renewcommand{\floatpagefraction}{0.75}
 \setlength{\footskip}{26pt}
-\DeclareCaptionFormat{myformat}{\fontsize{\@@ptsize}{\@@ptsize+1pt}\selectfont#1#2#3}
-\captionsetup{justification=centering,format=myformat}
 
-
+% Format captions
+\DeclareCaptionFormat{myformat}{\fontsize{\ds@10pt}{\@@ptsize plus 1pt}\selectfont#1#2#3}
+\captionsetup{justification=centering,labelformat=simple,labelsep=period,format=myformat}
+ 
 
 %% Format titles
 \titleformat{\chapter}{\bfseries\Huge\raggedright}{\thechapter}{1ex}{#1} % default formatting for non-theses
@@ -121,6 +136,16 @@
 \titleformat{\section}{\bfseries\Large}{\thesection}{1ex}{#1}
 \titlespacing{\section}{0pt}{\baselineskip}{0.2\baselineskip}
 \titleformat{\subsection}{\bfseries\large}{\thesubsection}{1ex}{#1}
+
+
+
+%% COVID-19 impact statement
+\newenvironment{uomcovid}{
+  \phantomsection \pdfbookmark[section]{COVID-19 impact statement}{covid}
+  \chapter*{COVID-19 impact statement}
+  \pagenumbering{gobble}
+}
+{\clearpage}
 
 
 %% Title page
@@ -136,7 +161,8 @@
 }
 \def\maketitle{
   \begin{titlepage}
-    \bookmark[page=1,level=-1]{Front matter}
+    \hypertarget{TitlePage}{}
+    \bookmark[dest=TitlePage,level=-1]{Front matter}
 	\phantomsection \pdfbookmark[chapter]{Title page}{title}
   
     % Add logo. No requirement for this, but is nice. Note sizes are hand calculated. Won't be correct if change paper size
@@ -160,6 +186,7 @@
 	
   \end{titlepage}
   
+  \pagenumbering{arabic}
   \setcounter{page}{2} % ensure no number on title page, numbers on other pages match those in the PDF
 }
 \makeatother  %to avoid error messages generated by "\@". Makes Latex treat "@" like a letter
@@ -168,11 +195,7 @@
 
 %% Abstract
 \renewenvironment{abstract}{%
-  \clearpage\phantomsection
-  \null\vfil
-  \begin{center}%
-      {\Large \bfseries \abstractname\vspace{-.5em}\vspace{0pt}}%
-  \end{center}%
+  \clearpage\phantomsection\chapter*{Abstract}
 }
 {\addcontentsline{toc}{chapter}{\abstractname}\endquotation\vfil\null\clearpage}
 
@@ -182,12 +205,16 @@
 \newcommand{\uomtoc}{
   \phantomsection\addcontentsline{toc}{chapter}{Contents}
   \tableofcontents
-  \vspace*{\fill}
-  \begin{flushright}
-  \textbf{Word Count}: \wordcount
-  \end{flushright}
+  \ifthenelse{\equal{\reportyear}{thesis}}{
+    \vspace*{\fill}
+    \begin{flushright}
+      \textbf{Word Count}: \wordcount
+    \end{flushright}
+  }{}
   \clearpage
-  }
+}
+
+
 \newcommand{\uomlof}{
   \phantomsection\addcontentsline{toc}{chapter}{List of figures}
   \listoffigures
@@ -203,17 +230,16 @@
   \chapter*{List of publications}
 }
 {\clearpage}
-  
-
-  
-%% Acknowledgements  
-\newenvironment{uomacknowledgements}{
-  \phantomsection\addcontentsline{toc}{chapter}{Acknowledgements}
-  \chapter*{Acknowledgements}
+\newenvironment{uomterms}{
+  \phantomsection\addcontentsline{toc}{chapter}{Terms and abbreviations}
+  \chapter*{Terms and abbreviations}
 }
 {\clearpage}
-
-
+\newenvironment{uomlay}{
+  \phantomsection\addcontentsline{toc}{chapter}{Lay abstract}
+  \chapter*{Lay abstract}
+}
+{\clearpage}
 
 %% Declarations
 \newcommand{\uomdeclarations}{
@@ -230,9 +256,18 @@
     \item The ownership of certain Copyright, patents, designs, trademarks and other intellectual property (the ``Intellectual Property'') and any reproductions of copyright works in the thesis, for example graphs and tables (``Reproductions''), which may be described in this thesis, may not be owned by the author and may be owned by third parties. Such Intellectual Property and Reproductions cannot and must not be made available for use without the prior written permission of the owner(s) of the relevant Intellectual Property and/or Reproductions.
 	\item Further information on the conditions under which disclosure, publication and commercialisation of this thesis, the Copyright and any Intellectual Property and/or Reproductions described in it may take place is available in the University IP Policy (see \url{http://documents.manchester.ac.uk/DocuInfo.aspx?DocID=24420}), in any relevant Thesis restriction declarations deposited in the University Library, The University Library’s regulations (see \url{http://www.library.manchester.ac.uk/about/regulations/}) and in The University’s policy on Presentation of Theses.
   \end{enumerate}
-  \bookmarksetup{startatroot}
   \clearpage
 }
+
+
+
+%% Acknowledgements  
+\newenvironment{uomacknowledgements}{
+  \phantomsection\addcontentsline{toc}{chapter}{Acknowledgements}
+  \chapter*{Acknowledgements}
+  \bookmarksetup{startatroot}
+}
+{\clearpage}
 
 
 
