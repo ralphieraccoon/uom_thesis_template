@@ -59,7 +59,8 @@
 \RequirePackage{enumitem}                % allow change of numbering style in enumeration
 \RequirePackage{ifthen}                  % allow if then else statements
 \RequirePackage{appendix}                % control over appendix
-\RequirePackage{caption}                 % control figure captions
+\RequirePackage{caption}                 % control figure 
+\RequirePackage{etoolbox}                % to check if word count command is empty
 
   
 %% Handle options
@@ -226,12 +227,12 @@
   \phantomsection\addcontentsline{toc}{chapter}{Contents}
   \tableofcontents
   \ifthenelse{\equal{\reportyear}{thesis}}{
-    \ifdefined\wordcount
+    \ifdefempty{\wordcount}{}{
       \vspace*{\fill}
       \begin{flushright}
         \textbf{Word count}: \thewordcount
       \end{flushright}
-    \fi
+    }
   }{}
   \clearpage
 }
