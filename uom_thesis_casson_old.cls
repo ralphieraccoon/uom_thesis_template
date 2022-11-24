@@ -1,44 +1,37 @@
 %% Alex Casson - alex.casson@manchester.ac.uk
 %
-%
 % Aim
 % A LaTeX class file for submitting University of Manchester thesis, particularly PhD ones
 %
-%
 % Versions
-% 15.10.22 - v3 - removed axessibility package for accessibility as too many bugs with texlive 2022. Added in PDF/A support instead. Otherwise, minor tidy up updates and checked for 2022 regulations
-% 25.05.21 - v2 - updates for 2021: COVID impact statement, now a single list of references at the end, and a few minor cosmetic changes
 % 07.06.17 - v1 - initial script
-%
-%
+% 
 % Notes
-% - Based upon June 2022 submission guidelines (http://documents.manchester.ac.uk/DocuInfo.aspx?DocID=7420)
 % - Assumes build with XeLaTeX or LuaLaTeX. Font setting is different for LaTeX or PDFLaTeX
-% - On Linux systems requires ttf-mscorefonts-installer to be installed to have access to the correct fonts. If compling via Overleaf not all of the fonts allows allowed by the University (particularly Calibri) are installed. You'll need to manually upload the font files for your project for this option to work. 
+% - On Linux systems requires ttf-mscorefonts-installer to be installed to have access to the correct fonts
+% - Based upon June 2017 submission guidelines (http://documents.manchester.ac.uk/DocuInfo.aspx?DocID=7420)
 % - Font options are: 10pt Arial, Verdana, Tahoma, Trebuchet OR 12pt Calibri, Times, Times New Roman, Palatino and Garamond. Calibri is preferred here.
-% - TODO: Font size is changed via a \AtBeginDocument. Ideally would be done at \LoadClass, but get a loop as fontspec needs to know the font size to change the font. The current methods works, except that the main title, and the figure/table captions, are always the same size regardless of the asked for font size. As choices are only 10pt or 12pt this doesn't make a big difference. It would be nice to fix!
-% - TODO: It would be good to have the copyright statement etc, automatically added to the document meta-data. This is to-do.
-% - TODO: There is a requirement of blank pages to say "Blank page". This is not done automatically.
-% - TODO: Fix the axessibility package
-% - TODO: Add support for double sided layouts. This is allowed under the regulations, but only single sided is supported here
-% - TODO: There are now quite a lot of preface pages,taking up a lot of space in the table of contents (nearly half a page!). It might be good to group these under a 'Front matter' heading, which would mean they take up less space. The electronic TOC already does this, but not the printed one
-% - TODO: Add blank page text
+% - Font size is changed via a \AtBeginDocument. Ideally would be done at \LoadClass, but get a loop as fontspec needs to know the font size to change the font. The current methods works, except that the main title size is always the same, regardless of the asked for font size. As choices are only 10pt or 12pt this doesn't make a big difference. It would be nice to fix!
+% - There is a requirement of blank pages to say "Blank page". This is not done automatically
 % - Adds a UoM logo. No requirement for this, but is nice. Note sizes are hand calculated. Won't be correct if change paper size
 % - Assumes title page is only one page long!
 % - Assumes not using subfigure. Tocloft has (easily fixed) issues if do.
 % - Note that for the references font size it is set here to be one larger than that actually wanted. Not clear why, but then gives the correct size! Have to do this in main .tex
+%
+% To do
+% - Remove indent at start of references
+% - Make customisations/changes to the references global, and in class.
+% - Add blank page to start appendix on to make more clear
 % -----------------------------------------------------------------------------
+
 
 %% Class definition - based upon report class
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{uom_thesis_casson}[2022/10/15 - Alex Casson - University of Manchester thesis format]
+\ProvidesClass{uom_thesis_casson}[2017/08/29 - Alex Casson - University of Manchester thesis format]
 \LoadClass[a4paper, oneside]{report}
 
 
 %% Load packages
-\RequirePackage[a-3u]{pdfx}
-%\RequirePackage{hyperref}                % create internal hyperlinks, must be specified before cite package to work. Is loaded automatically by pdfx
-  \hypersetup{hidelinks,colorlinks=false,breaklinks=true,bookmarksdepth=2}  % have no highlighting on links and break lines in the LOF and LOT
 \RequirePackage[explicit]{titlesec}      % re-format section titles
 \RequirePackage{geometry}                % set paper margins
 \RequirePackage{setspace}                % set line spacing
@@ -50,56 +43,32 @@
   \renewcommand{\listtablename}{List of tables} 
   \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % add dots 
   \renewcommand{\cftsubsecleader}{\cftdotfill{\cftdotsep}}
-  \setlength{\cftfignumwidth}{3em}  % modify number width in LoF
-  \setlength{\cfttabnumwidth}{3em}  % modify number width in LoT
-  \setlength{\cftfigindent}{0em}    % no indents in LoF
-  \setlength{\cfttabindent}{0em}    % no indents in LoT
+\RequirePackage{hyperref}                % create internal hyperlinks, must be specified before cite package to work
+  \hypersetup{hidelinks,colorlinks=false,breaklinks=true,bookmarksdepth=2}  % have no highlighting on links and break lines in the LOF and LOT
 \RequirePackage{bookmark}                % for adding custom bookmarks
   \bookmarksetup{numbered}
 \RequirePackage{enumitem}                % allow change of numbering style in enumeration
 \RequirePackage{ifthen}                  % allow if then else statements
 \RequirePackage{appendix}                % control over appendix
 \RequirePackage{caption}                 % control figure captions
-
+ 
   
 %% Handle options
 \def\@@ptsize{12pt} % font size variable
-\@namedef{ds@10pt}{\def\@ptsize{10}}
 \newcommand{\reportyear}{thesis} % set report type
-\DeclareOption{calibri}{\setmainfont[Ligatures=TeX]{Calibri} \def\@@ptsize{12pt}}  
-\DeclareOption{times}{\setmainfont[Ligatures=TeX]{TeX Gyre Termes} \def\@@ptsize{12pt}}
-\DeclareOption{palatino}{\setmainfont[Ligatures=TeX]{TeX Gyre Pagella} \def\@@ptsize{12pt}}
-\DeclareOption{garamond}{\setmainfont[Ligatures=TeX]{Adobe Garamond Pro} \def\@@ptsize{12pt}}
-\DeclareOption{arial}{\setmainfont[Ligatures=TeX]{Arial} \def\@@ptsize{10pt}}
-\DeclareOption{tahoma}{\setmainfont[Ligatures=TeX]{Tahoma} \def\@@ptsize{10pt}}
-\DeclareOption{verdana}{\setmainfont[Ligatures=TeX]{Verdana} \def\@@ptsize{10pt}}
-\DeclareOption{trebuchet}{\setmainfont[Ligatures=TeX]{Trebuchet MS} \def\@@ptsize{10pt}}
+\DeclareOption{calibri}{\setmainfont{Calibri} \def\@@ptsize{12pt}} 
+\DeclareOption{times}{\setmainfont{TeX Gyre Termes} \def\@@ptsize{12pt}}
+\DeclareOption{palatino}{\setmainfont{TeX Gyre Pagella} \def\@@ptsize{12pt}}
+\DeclareOption{garamond}{\setmainfont{Adobe Garamond Pro} \def\@@ptsize{12pt}}
+\DeclareOption{arial}{\setmainfont{Arial} \def\@@ptsize{10pt}}
+\DeclareOption{tahoma}{\setmainfont{Tahoma} \def\@@ptsize{10pt}}
+\DeclareOption{verdana}{\setmainfont{Verdana} \def\@@ptsize{10pt}}
+\DeclareOption{trebuchet}{\setmainfont{Trebuchet MS} \def\@@ptsize{10pt}}
 \DeclareOption{thesis}{\renewcommand{\reportyear}{thesis}}
 \DeclareOption{first}{\renewcommand{\reportyear}{first}}
 \DeclareOption{second}{\renewcommand{\reportyear}{second}}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{report}}
 \ProcessOptions\relax
-
-
-
-%% Accessibility options
-%\RequirePackage{unicode-math} % unicode maths for accessibility
-% Removed axessibility in 2022 version - 2022 version of texlive seems to have lots of bugs with this!
-% Put the two lines low before decalre document class
-%\RequirePackage{pdfmanagement-testphase}
-%\DeclareDocumentMetadata{uncompress}
-% Other lines go here
-%\RequirePackage[tagpdf]{axessibility} % LaTeX readable equations for accessibility
-%  \tagpdfsetup{tabsorder=structure,uncompress,activate-all,interwordspace=true}
-%  \pdfextension catalog{/Lang (en-GB)} % note the language is also set on line 48, should match
-% Can then use \alt command:
-%\begin{figure}
-%    \centering
-%    \includegraphics[width=10cm]{apollo17_earth.jpg}
-%    \alt{Image of the Earth from outer space}
-%    \caption{Image of the Earth from the Apollo 17 mission}
-%    \label{fig:earth}
-%\end{figure}
 
 
 %% Set lengths - sizes for A4 paper from http://www.brand.manchester.ac.uk/visual-identity/print/
@@ -111,6 +80,12 @@
 \newlength{\margintop}    \setlength{\margintop}{1.5cm}
 \newlength{\marginbottom} \setlength{\marginbottom}{1.5cm}  
 
+
+
+%% Set main font.
+% If using LaTeX or PDFLaTeX comment out this line and revert to a Times text. This is acceptable. 
+%\setmainfont{Calibri}
+%\setmainfont{TeX Gyre Termes} % Times. Optional.
 
 
 %% Set paper format
@@ -131,11 +106,10 @@
 \renewcommand{\textfraction}{0.1}
 \renewcommand{\floatpagefraction}{0.75}
 \setlength{\footskip}{26pt}
+\DeclareCaptionFormat{myformat}{\fontsize{\@@ptsize}{\@@ptsize+1pt}\selectfont#1#2#3}
+\captionsetup{justification=centering,format=myformat}
 
-% Format captions
-\DeclareCaptionFormat{myformat}{\fontsize{\ds@10pt}{\@@ptsize plus 1pt}\selectfont#1#2#3}
-\captionsetup{justification=centering,labelformat=simple,labelsep=period,format=myformat}
- 
+
 
 %% Format titles
 \titleformat{\chapter}{\bfseries\Huge\raggedright}{\thechapter}{1ex}{#1} % default formatting for non-theses
@@ -147,16 +121,6 @@
 \titleformat{\section}{\bfseries\Large}{\thesection}{1ex}{#1}
 \titlespacing{\section}{0pt}{\baselineskip}{0.2\baselineskip}
 \titleformat{\subsection}{\bfseries\large}{\thesubsection}{1ex}{#1}
-
-
-
-%% COVID-19 impact statement
-\newenvironment{uomcovid}{
-  \phantomsection \pdfbookmark[section]{COVID-19 impact statement}{covid}
-  \chapter*{COVID-19 impact statement}
-  \pagenumbering{gobble}
-}
-{\clearpage}
 
 
 %% Title page
@@ -172,8 +136,7 @@
 }
 \def\maketitle{
   \begin{titlepage}
-    \hypertarget{TitlePage}{}
-    \bookmark[dest=TitlePage,level=-1]{Front matter}
+    \bookmark[page=1,level=-1]{Front matter}
 	\phantomsection \pdfbookmark[chapter]{Title page}{title}
   
     % Add logo. No requirement for this, but is nice. Note sizes are hand calculated. Won't be correct if change paper size
@@ -190,14 +153,13 @@
 	  \@submitdate
 	  \vskip 3cm
 	  \@author\ \linebreak
-	  \@department
+	  Department of \@department
       \vspace*{\fill}
     \end{center}
 
 	
   \end{titlepage}
   
-  \pagenumbering{arabic}
   \setcounter{page}{2} % ensure no number on title page, numbers on other pages match those in the PDF
 }
 \makeatother  %to avoid error messages generated by "\@". Makes Latex treat "@" like a letter
@@ -206,18 +168,13 @@
 
 %% Abstract
 \renewenvironment{abstract}{%
-  \clearpage\phantomsection\chapter*{Abstract}
+  \clearpage\phantomsection
+  \null\vfil
+  \begin{center}%
+      {\Large \bfseries \abstractname\vspace{-.5em}\vspace{0pt}}%
+  \end{center}%
 }
 {\addcontentsline{toc}{chapter}{\abstractname}\endquotation\vfil\null\clearpage}
-
-
-
-
-% Word count command
-\makeatletter
-\newcommand{\wordcount}[1]{\newcommand{\@wordcount}{#1}}
-\makeatother
-\makeatletter\newcommand{\thewordcount}[0]{\@wordcount}\makeatother
 
 
 
@@ -225,18 +182,12 @@
 \newcommand{\uomtoc}{
   \phantomsection\addcontentsline{toc}{chapter}{Contents}
   \tableofcontents
-  \ifthenelse{\equal{\reportyear}{thesis}}{
-    \ifdefined\wordcount
-      \vspace*{\fill}
-      \begin{flushright}
-        \textbf{Word count}: \thewordcount
-      \end{flushright}
-    \fi
-  }{}
+  \vspace*{\fill}
+  \begin{flushright}
+  \textbf{Word Count}: \wordcount
+  \end{flushright}
   \clearpage
-}
-
-
+  }
 \newcommand{\uomlof}{
   \phantomsection\addcontentsline{toc}{chapter}{List of figures}
   \listoffigures
@@ -252,16 +203,17 @@
   \chapter*{List of publications}
 }
 {\clearpage}
-\newenvironment{uomterms}{
-  \phantomsection\addcontentsline{toc}{chapter}{Terms and abbreviations}
-  \chapter*{Terms and abbreviations}
+  
+
+  
+%% Acknowledgements  
+\newenvironment{uomacknowledgements}{
+  \phantomsection\addcontentsline{toc}{chapter}{Acknowledgements}
+  \chapter*{Acknowledgements}
 }
 {\clearpage}
-\newenvironment{uomlay}{
-  \phantomsection\addcontentsline{toc}{chapter}{Lay abstract}
-  \chapter*{Lay abstract}
-}
-{\clearpage}
+
+
 
 %% Declarations
 \newcommand{\uomdeclarations}{
@@ -278,38 +230,9 @@
     \item The ownership of certain Copyright, patents, designs, trademarks and other intellectual property (the ``Intellectual Property'') and any reproductions of copyright works in the thesis, for example graphs and tables (``Reproductions''), which may be described in this thesis, may not be owned by the author and may be owned by third parties. Such Intellectual Property and Reproductions cannot and must not be made available for use without the prior written permission of the owner(s) of the relevant Intellectual Property and/or Reproductions.
 	\item Further information on the conditions under which disclosure, publication and commercialisation of this thesis, the Copyright and any Intellectual Property and/or Reproductions described in it may take place is available in the University IP Policy (see \url{http://documents.manchester.ac.uk/DocuInfo.aspx?DocID=24420}), in any relevant Thesis restriction declarations deposited in the University Library, The University Library’s regulations (see \url{http://www.library.manchester.ac.uk/about/regulations/}) and in The University’s policy on Presentation of Theses.
   \end{enumerate}
+  \bookmarksetup{startatroot}
   \clearpage
 }
-
-
-
-%% List of thesis revisions  
-\newenvironment{uomlotr}{
-  \phantomsection\addcontentsline{toc}{chapter}{List of thesis revisions}
-  \chapter*{List of thesis revisions}
-  \bookmarksetup{startatroot}
-}
-{\clearpage}
-
-
-
-%% Acknowledgements  
-\newenvironment{uomacknowledgements}{
-  \phantomsection\addcontentsline{toc}{chapter}{Acknowledgements}
-  \chapter*{Acknowledgements}
-  \bookmarksetup{startatroot}
-}
-{\clearpage}
-
-
-
-%% The author  
-\newenvironment{uomauthor}{
-  \phantomsection\addcontentsline{toc}{chapter}{The author}
-  \chapter*{The author}
-  \bookmarksetup{startatroot}
-}
-{\clearpage}
 
 %% Chapter with Abstract
 \newcommand{\chapterwithabstract}[2]{
