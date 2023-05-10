@@ -163,11 +163,12 @@
 %% Title page
 \makeatletter
 \def\faculty#1{\gdef\@faculty{#1}}
+\def\school#1{\gdef\@school{#1}}
 \def\department#1{\gdef\@department{#1}}
 \def\submitdate#1{\gdef\@submitdate{#1}}
 \newcommand{\titletext}[1]
 {
-  \ifthenelse{\equal{#1}{thesis}}{A thesis submitted to the University of Manchester for the degree of\ \linebreak Doctor of Philosophy\ \linebreak in the Faculty of \@faculty}{}
+  \ifthenelse{\equal{#1}{thesis}}{A thesis submitted to the University of Manchester for the degree of\ \linebreak Doctor of Philosophy\ \linebreak in the Faculty of \@faculty\ \linebreak in the School of \@school}{}
   \ifthenelse{\equal{#1}{first}}{Nine month progress report}{}
   \ifthenelse{\equal{#1}{second}}{End of second year report}{}
 }
@@ -191,7 +192,7 @@
 	  \@submitdate
 	  \vskip 3cm
 	  \@author\ \linebreak
-	  \@department
+	  Department of \@department
       \vspace*{\fill}
     \end{center}
 
